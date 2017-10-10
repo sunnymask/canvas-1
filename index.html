@@ -19,8 +19,30 @@ canvas {
 <body>
 	<canvas id="canvas"></canvas>
 <script>
+window.utils = {};
+window.utils.captureMouse = function(element) {
+	var mouse = {
+		x: 0,
+		y: 0
+	};
+	element.addEventListener('mousemove',function(event) {
+		var x,y;
+		if (event.pageX || event.pageY) {
+			x = event.pageX;
+			y = event.pageY;
+		}else {
+			x = event.clientX + document.body.scrollLeft + documentElement.scrollLeft;
+			x = event.clientY + document.body.scrollTop + documentElement.scrollTop;
+		};
+
+		x -= element.offsetLeft;
+		y -= element.offsetTop;
+		mouse.x = x;
+		mouse.y = y;
+	},false);
+	return mouse;
+};
 window.onload = function() {
-	
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
 	canvas.width = document.body.clientWidth;
@@ -28,6 +50,7 @@ window.onload = function() {
 	var _w = canvas.width,
 		_h = canvas.height;
 	var x,y,point = [],ar;
+	var mouse = utils.captureMouse(canvas);//实例化
     var FPS = 1000/60;
 	function drawL(ctx) {
 		var _x,_y; 
@@ -103,9 +126,18 @@ window.onload = function() {
 				context.closePath();
 				context.fill();
 			}
+			context.fillStyle = '#fff';
+			context.beginPath();
+			context.arc(mouse.x,mouse.y,2,0,2*Math.PI,true);
+			context.closePath();
+			context.fill();
 		}
 			
 		ar = deepCopy(point);
+		ar.push({
+			x : mouse.x,
+			y : mouse.y
+		})
 		drawL(context);
 	}
 }
