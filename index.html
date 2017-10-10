@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+html,body {
+	height: 100%;
+}
+canvas {
+	background-color: #000;
+}
+</style>
+<body>
+	<canvas id="canvas"></canvas>
+<script>
+window.onload = function() {
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+	canvas.width = document.body.clientWidth;
+	canvas.height = document.body.clientHeight/2;
+	var _w = canvas.width,
+		_h = canvas.height;
+	var x,y,point = [],ar;
+    var FPS = 1000/60;
+	function drawL(ctx) {
+		var _x,_y; 
+		ctx.lineWidth = 0.5;
+		ctx.strokeStyle = '#270726';
+		for (var i = 1; i < ar.length; i++) {
+			_x = ar[0].x - ar[i].x;
+			_y = ar[0].y - ar[i].y;
+			if (Math.pow((_x * _x + _y * _y), 0.5) < 100) {
+				ctx.moveTo(ar[0].x,ar[0].y);
+				ctx.lineTo(ar[i].x,ar[i].y);
+				ctx.stroke();
+			}
+		}
+		ar.splice(0,1);
+		if (ar.length >= 2) {
+			drawL(context);
+		}
+	}
+	setInterval(function() {
+		run()
+	},FPS);
+	function run() {
+		if (point.length > 0) {
+			for (var i = 0; i < point.length; i++) {
+				if (point[i].x <= 0) {
+					point[i].sx = true;
+				}else if (point[i].x >= _w) {
+					point[i].sx = false;
+				}
+				if (point[i].y <= 0) {
+					point[i].sy = true;
+				}else if (point[i].y >= _h) {
+					point[i].sy = false;
+				}
+				if (point[i].sx) {
+					point[i].x = point[i].x + point[i].speed;
+				}else {
+					point[i].x = point[i].x - point[i].speed;
+				}
+				if (point[i].sy) {
+					point[i].y = point[i].y + point[i].speed;
+				}else {
+					point[i].y = point[i].y - point[i].speed;
+				}
+			}
+		}
+		context.clearRect(0,0,_w,_h);
+		context.fillStyle = '#716135';
+		if (point.length <= 0) {
+			for (var i = 0; i < 80; i++) {
+				context.beginPath();
+				x = Math.random()*canvas.width * 0.9;
+				y = Math.random()*canvas.height * 0.9;
+				point.push({
+					x : x,
+					y : y,
+					sx : Math.random() < 0.5 ? true : false,
+					sy : Math.random() < 0.5 ? true : false,
+					speed: Math.random() * 1.5
+				});
+				context.arc(x,y,2,0,2*Math.PI,true);
+				context.closePath();
+				context.fill();
+			}
+
+		}else {
+			for (var i = 0; i < point.length; i++) {
+				context.beginPath();
+				x = point[i].x;
+				y = point[i].y;
+				context.arc(x,y,2,0,2*Math.PI,true);
+				context.closePath();
+				context.fill();
+			}
+		}
+			
+		ar = deepCopy(point);
+		drawL(context);
+	}
+}
+function deepCopy(o){
+    if (o instanceof Array) {
+        var n = [];
+        for (var i = 0; i < o.length; ++i) {
+            n[i] = deepCopy(o[i]);
+        }
+        return n;
+
+    } else if (o instanceof Object) {
+        var n = {}
+        for (var i in o) {
+            n[i] = deepCopy(o[i]);
+        }
+        return n;
+    } else {
+        return o;
+    }
+}
+</script>
+</body>
+</html>
