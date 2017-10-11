@@ -54,7 +54,7 @@ window.onload = function() {
     var FPS = 1000/60;
 	function drawL(ctx) {
 		var _x,_y; 
-		ctx.lineWidth = 0.5;
+		ctx.lineWidth = 1;
 		ctx.strokeStyle = '#270726';
 		for (var i = 1; i < ar.length; i++) {
 			_x = ar[0].x - ar[i].x;
@@ -110,7 +110,7 @@ window.onload = function() {
 					y : y,
 					sx : Math.random() < 0.5 ? true : false,
 					sy : Math.random() < 0.5 ? true : false,
-					speed: Math.random() * 1.5
+					speed: Math.random() * 1.2
 				});
 				context.arc(x,y,2,0,2*Math.PI,true);
 				context.closePath();
