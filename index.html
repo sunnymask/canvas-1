@@ -34,7 +34,6 @@ window.utils.captureMouse = function(element) {
 			x = event.clientX + document.body.scrollLeft + documentElement.scrollLeft;
 			x = event.clientY + document.body.scrollTop + documentElement.scrollTop;
 		};
-
 		x -= element.offsetLeft;
 		y -= element.offsetTop;
 		mouse.x = x;
@@ -59,7 +58,7 @@ window.onload = function() {
 		for (var i = 1; i < ar.length; i++) {
 			_x = ar[0].x - ar[i].x;
 			_y = ar[0].y - ar[i].y;
-			if (Math.pow((_x * _x + _y * _y), 0.5) < 100) {
+			if (Math.pow((_x * _x + _y * _y), 0.5) < 80) {
 				ctx.moveTo(ar[0].x,ar[0].y);
 				ctx.lineTo(ar[i].x,ar[i].y);
 				ctx.stroke();
@@ -99,7 +98,8 @@ window.onload = function() {
 			}
 		}
 		context.clearRect(0,0,_w,_h);
-		context.fillStyle = '#716135';
+		context.fillStyle = '#666';
+		context.globalCompositeOperation="destination-over";
 		if (point.length <= 0) {
 			for (var i = 0; i < 80; i++) {
 				context.beginPath();
@@ -110,13 +110,12 @@ window.onload = function() {
 					y : y,
 					sx : Math.random() < 0.5 ? true : false,
 					sy : Math.random() < 0.5 ? true : false,
-					speed: Math.random() + 0.5
+					speed: Math.random() + 0.35
 				});
 				context.arc(x,y,2,0,2*Math.PI,true);
 				context.closePath();
 				context.fill();
 			}
-
 		}else {
 			for (var i = 0; i < point.length; i++) {
 				context.beginPath();
@@ -126,7 +125,7 @@ window.onload = function() {
 				context.closePath();
 				context.fill();
 			}
-			context.fillStyle = '#fff';
+			context.fillStyle = '#666';
 			context.beginPath();
 			context.arc(mouse.x,mouse.y,2,0,2*Math.PI,true);
 			context.closePath();
@@ -148,7 +147,6 @@ function deepCopy(o){
             n[i] = deepCopy(o[i]);
         }
         return n;
-
     } else if (o instanceof Object) {
         var n = {}
         for (var i in o) {
